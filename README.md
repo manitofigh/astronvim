@@ -4,7 +4,8 @@ This is a slightly-customized version of the Astronvim nvim configuration.
 
 #### Make a backup of your current nvim and shared folder
 
-> [!IMPORTANT] This is for people who _already_ have a setup an nvim config.
+> [!IMPORTANT]
+> This is for people who _already_ have a setup an nvim config.
 > If it's your first time dealing with nvim configs, don't bother with this section.
 
 ```shell

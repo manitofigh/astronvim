@@ -1,4 +1,4 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+-- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
 
 -- You can also add or configure plugins by creating files in this `plugins/` folder
 -- Here are some examples:
@@ -27,6 +27,7 @@ return {
         transparent_background_level = 0,
       }
       -- Hook into the colorscheme to override the background after it's loaded
+      --[[
       vim.api.nvim_create_autocmd("ColorScheme", {
         pattern = "everforest",
         callback = function()
@@ -38,11 +39,14 @@ return {
           vim.cmd "highlight EndOfBuffer guibg=#000000"
         end,
       })
+      ]]--
     end,
   },
 
   -- customize alpha options
   -- You can disable default plugins as follows:
+  { "rcarriga/nvim-notify", enabled = false },
+  
   { "max397574/better-escape.nvim", enabled = false },
 
   -- You can also easily customize additional setup of plugins that is outside of the plugin's setup call

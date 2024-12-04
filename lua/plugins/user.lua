@@ -16,29 +16,14 @@ return {
   },
 
   -- == Examples of Overriding Plugins ==
-
-  -- customize alpha options
+  { "mbbill/undotree" },
+  { "nvim-tree/nvim-tree.lua" },
   {
-    "goolord/alpha-nvim",
-    opts = function(_, opts)
-      -- customize the dashboard header
-      opts.section.header.val = {
-        " █████  ███████ ████████ ██████   ██████",
-        "██   ██ ██         ██    ██   ██ ██    ██",
-        "███████ ███████    ██    ██████  ██    ██",
-        "██   ██      ██    ██    ██   ██ ██    ██",
-        "██   ██ ███████    ██    ██   ██  ██████",
-        " ",
-        "    ███    ██ ██    ██ ██ ███    ███",
-        "    ████   ██ ██    ██ ██ ████  ████",
-        "    ██ ██  ██ ██    ██ ██ ██ ████ ██",
-        "    ██  ██ ██  ██  ██  ██ ██  ██  ██",
-        "    ██   ████   ████   ██ ██      ██",
-      }
-      return opts
-    end,
+    "folke/todo-comments.nvim",
+    enabled = false, -- Disable the plugin
   },
 
+  -- customize alpha options
   -- You can disable default plugins as follows:
   { "max397574/better-escape.nvim", enabled = false },
 

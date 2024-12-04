@@ -2,7 +2,21 @@ This is a slightly-customized version of the Astronvim nvim configuration.
 
 ## Installation
 
-#### Make a backup of your current nvim and shared folder
+### Step 0: Install the requirements
+
+you need to install the following packages through your desired package manager:
+```bash
+ripgrep
+lazygit
+bottom
+Python
+Node
+```
+
+You also need a "Nerd Font" downloaded and set as your terminal's font, which has support for some of the symbols and icons used in the terminal.
+Choose one from the list [at this page](https://www.nerdfonts.com/font-downloads)
+
+### Step 1: Make a backup of your current nvim and shared folder
 
 > [!IMPORTANT]
 > This step is for people who _already_ have a setup an nvim config.
@@ -15,20 +29,16 @@ mv ~/.local/state/nvim ~/.local/state/nvim.bak
 mv ~/.cache/nvim ~/.cache/nvim.bak
 ```
 
-#### Create a new user repository from this template
-
-Press the "Use this template" button above to create a new repository to store your user configuration.
-
-You can also just clone this repository directly if you do not want to track your user configuration in GitHub.
-
-#### Clone the repository
+### Step 2: Clone the repository to the config path
 
 ```shell
 git clone https://github.com/manitofigh/astronvim ~/.config/nvim
 ```
 
-#### Start Neovim
+### Finally: Start Neovim
 
 ```shell
 nvim
 ```
+
+Sit back and let the dependencies install.

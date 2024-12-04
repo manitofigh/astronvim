@@ -4,9 +4,12 @@
 
 A template for getting started with [AstroNvim](https://github.com/AstroNvim/AstroNvim)
 
-## 🛠️ Installation
+## Installation
 
 #### Make a backup of your current nvim and shared folder
+
+> [!Important] This is for people who _already_ have a setup an nvim config.
+> If it's your first time dealing with nvim configs, don't bother with this section.
 
 ```shell
 mv ~/.config/nvim ~/.config/nvim.bak

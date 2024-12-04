@@ -19,8 +19,26 @@ return {
   { "mbbill/undotree" },
   { "nvim-tree/nvim-tree.lua" },
   {
-    "folke/todo-comments.nvim",
-    enabled = false, -- Disable the plugin
+    "neanias/everforest-nvim",
+    priority = 1,
+    config = function()
+      require("everforest").setup {
+        background = "hard", -- Use hard background for darkest default
+        transparent_background_level = 0,
+      }
+      -- Hook into the colorscheme to override the background after it's loaded
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        pattern = "everforest",
+        callback = function()
+          vim.cmd "highlight Normal guibg=#000000"
+          vim.cmd "highlight NormalFloat guibg=#000000"
+          vim.cmd "highlight NonText guibg=#000000"
+          vim.cmd "highlight LineNr guibg=#000000"
+          vim.cmd "highlight SignColumn guibg=#000000"
+          vim.cmd "highlight EndOfBuffer guibg=#000000"
+        end,
+      })
+    end,
   },
 
   -- customize alpha options

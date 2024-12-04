@@ -19,6 +19,10 @@ return {
             function() require("telescope.builtin").live_grep() end,
             desc = "[S]earch by [G]rep",
           },
+          ["<leader>cs"] = {
+            function() require("telescope.builtin").colorscheme { enable_preview = true } end,
+            desc = "Select colorscheme",
+          },
           ["<leader>D"] = { ":%d _<CR>", desc = "[D]elete buffer to blackhole", noremap = true, silent = true },
           ["<leader>W"] = { ":w<CR>", desc = "[W]rite file", noremap = true, silent = true },
           ["<leader>X"] = { ":x<CR>", desc = "Save and e[x]it", noremap = true, silent = true },

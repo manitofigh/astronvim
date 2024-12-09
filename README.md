@@ -19,7 +19,7 @@ Choose one from the list [at this page](https://www.nerdfonts.com/font-downloads
 ### Step 1: Make a backup of your current nvim and shared folder
 
 > [!IMPORTANT]
-> This step is for people who _already_ have a setup an nvim config.
+> This step is for people who _already_ have an nvim config setup.
 > If it's your first time dealing with nvim configs, don't bother with this section and jump to **Step 2**.
 
 ```shell

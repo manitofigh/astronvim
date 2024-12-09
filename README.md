@@ -20,7 +20,7 @@ Choose one from the list [at this page](https://www.nerdfonts.com/font-downloads
 
 > [!IMPORTANT]
 > This step is for people who _already_ have a setup an nvim config.
-> If it's your first time dealing with nvim configs, don't bother with this section.
+> If it's your first time dealing with nvim configs, don't bother with this section and jump to **Step 2**.
 
 ```shell
 mv ~/.config/nvim ~/.config/nvim.bak

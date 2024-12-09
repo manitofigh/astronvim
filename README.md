@@ -14,7 +14,7 @@ Node
 ```
 
 You also need a "Nerd Font" downloaded and set as your terminal's font, which has support for some of the symbols and icons used in the terminal.
-Choose one from the list [at this page](https://www.nerdfonts.com/font-downloads)
+Choose one from the list [at this page](https://www.nerdfonts.com/font-downloads).
 
 ### Step 1: Make a backup of your current nvim and shared folder
 

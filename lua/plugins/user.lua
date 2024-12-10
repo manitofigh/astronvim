@@ -39,15 +39,50 @@ return {
           vim.cmd "highlight EndOfBuffer guibg=#000000"
         end,
       })
-      ]]--
+      ]]
+      --
     end,
   },
 
   -- customize alpha options
   -- You can disable default plugins as follows:
   { "rcarriga/nvim-notify", enabled = false },
-  
+
   { "max397574/better-escape.nvim", enabled = false },
+
+  { "tpope/vim-fugitive" },
+
+  {
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("lualine").setup {
+        options = {
+          theme = "auto",
+          -- Add any additional options here
+        },
+        sections = {
+          lualine_a = { "mode" },
+          lualine_b = { "branch" },
+          lualine_c = { "filename" },
+          lualine_x = { "encoding", "fileformat", "filetype" },
+          lualine_y = { "progress" },
+          lualine_z = { "location" },
+        },
+        -- You can configure inactive sections if needed
+        inactive_sections = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = { "filename" },
+          lualine_x = { "location" },
+          lualine_y = {},
+          lualine_z = {},
+        },
+        -- Add extensions if necessary
+        extensions = {},
+      }
+    end,
+  },
 
   -- You can also easily customize additional setup of plugins that is outside of the plugin's setup call
   {

@@ -1,4 +1,4 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+-- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
 
 -- AstroCore provides a central place to modify mappings, vim options, autocommands, and more!
 -- Configuration documentation can be found with `:h astrocore`
@@ -27,7 +27,11 @@ return {
     -- vim options can be configured here
     options = {
       opt = { -- vim.opt.<key>
+        shiftwidth = 4, -- sets indentation to 4 spaces
+        tabstop = 4, -- sets tab width to 4 spaces
+        expandtab = true, -- converts tabs to spaces
         relativenumber = true, -- sets vim.opt.relativenumber
+        foldenable = false,
         number = true, -- sets vim.opt.number
         spell = false, -- sets vim.opt.spell
         signcolumn = "yes", -- sets vim.opt.signcolumn to yes

@@ -48,6 +48,11 @@ return {
   -- You can disable default plugins as follows:
   { "rcarriga/nvim-notify", enabled = false },
 
+  {
+    "kevinhwang91/nvim-ufo",
+    enabled = false,
+  },
+
   { "max397574/better-escape.nvim", enabled = false },
 
   { "tpope/vim-fugitive" },

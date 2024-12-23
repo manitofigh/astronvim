@@ -23,6 +23,7 @@ return {
       },
     },
     -- Icons can be configured throughout the interface
+    --[[
     icons = {
       -- configure the loading of the lsp in the status line
       LSPLoading1 = "⠋",
@@ -36,5 +37,7 @@ return {
       LSPLoading9 = "⠇",
       LSPLoading10 = "⠏",
     },
+    ]]
+    --
   },
 }

@@ -48,6 +48,7 @@ return {
   { "rcarriga/nvim-notify", enabled = false },
   
   { "max397574/better-escape.nvim", enabled = false },
+  { "kevinhwang91/nvim-ufo", enabled = false },
 
   -- You can also easily customize additional setup of plugins that is outside of the plugin's setup call
   {

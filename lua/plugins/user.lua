@@ -53,6 +53,13 @@ return {
     enabled = false,
   },
 
+  --[[
+  {
+    "Darazaki/indent-o-matic",
+    enabled = false,
+  },
+  --]]
+
   { "max397574/better-escape.nvim", enabled = false },
   { "kevinhwang91/nvim-ufo", enabled = false },
 

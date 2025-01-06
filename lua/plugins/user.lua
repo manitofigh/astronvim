@@ -84,6 +84,13 @@ return {
     end,
   },
 
+  --[[
+  {
+    "Darazaki/indent-o-matic",
+  },
+  ]]
+  --
+
   -- You can also easily customize additional setup of plugins that is outside of the plugin's setup call
   {
     "L3MON4D3/LuaSnip",

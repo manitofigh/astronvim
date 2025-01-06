@@ -48,7 +48,20 @@ return {
   -- You can disable default plugins as follows:
   { "rcarriga/nvim-notify", enabled = false },
 
+  {
+    "kevinhwang91/nvim-ufo",
+    enabled = false,
+  },
+
+  --[[
+  {
+    "Darazaki/indent-o-matic",
+    enabled = false,
+  },
+  --]]
+
   { "max397574/better-escape.nvim", enabled = false },
+  { "kevinhwang91/nvim-ufo", enabled = false },
 
   { "tpope/vim-fugitive" },
 

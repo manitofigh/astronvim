@@ -103,12 +103,32 @@ return {
     end,
   },
 
-  --[[
   {
-    "Darazaki/indent-o-matic",
-  },
-  ]]
-  --
+		"nvim-treesitter/nvim-treesitter-context",
+		dependencies = "nvim-treesitter/nvim-treesitter",
+		opts = {
+			enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+			max_lines = 6, -- How many lines the window should span. Values <= 0 mean no limit.
+			trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+			patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
+				-- For all filetypes
+				-- Note that setting an entry here replaces all other patterns for this entry.
+				-- By setting the 'default' entry below, you can control which nodes you want to
+				-- appear in the context window.
+				default = {
+					"class",
+					"function",
+					"method",
+					"for",
+					"while",
+					"if",
+					"switch",
+					"case",
+				},
+			},
+			zindex = 20, -- The Z-index of the context window
+		},
+	},
 
   -- You can also easily customize additional setup of plugins that is outside of the plugin's setup call
   {

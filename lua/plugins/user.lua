@@ -27,7 +27,10 @@ return {
 
   -- == Examples of Overriding Plugins ==
   { "tarides/ocaml.nvim", config = function() require("ocaml").setup() end },
-  { "karb94/neoscroll.nvim", opts = {} },
+  {
+    "stevearc/resession.nvim",
+    enabled = false,
+  },
   { "mbbill/undotree" },
   { "nvim-tree/nvim-tree.lua" },
   {

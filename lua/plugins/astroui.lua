@@ -13,7 +13,8 @@ return {
     -- change colorscheme
     -- colorscheme = "astrodark",
     -- colorscheme = "everforest",
-    colorscheme = "default",
+    -- colorsche = "default",
+    colorscheme = "rose-pine",
     -- AstroUI allows you to easily modify highlight groups easily for any and all colorschemes
     highlights = {
       init = { -- this table overrides highlights in all themes

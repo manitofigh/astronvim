@@ -18,6 +18,11 @@ return {
     opts = {}, -- lazy.nvim will implicitly calls `setup {}`
   },
 
+  {
+    "andrewferrier/wrapping.nvim",
+    config = function() require("wrapping").setup() end,
+  },
+
   "andweeb/presence.nvim",
   {
     "ray-x/lsp_signature.nvim",

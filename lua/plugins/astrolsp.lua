@@ -10,6 +10,8 @@ return {
   "AstroNvim/astrolsp",
   ---@type AstroLSPOpts
   opts = {
+    -- Clear deprecated vim.lsp.with() handlers from AstroNvim defaults
+    lsp_handlers = {},
     -- Configuration table of features provided by AstroLSP
     features = {
       codelens = true, -- enable/disable codelens refresh on start

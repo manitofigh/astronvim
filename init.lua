@@ -38,6 +38,15 @@ vim.diagnostic.config = function(opts, ...)
 end
 
 local _original_validate = vim.validate
+-- Map old-style single-char type abbreviations to full type names
+local _validate_type_map = {
+  s = "string", S = "string",
+  n = "number", N = "number",
+  t = "table", T = "table",
+  f = "function", F = "function",
+  b = "boolean", B = "boolean",
+  c = "callable", C = "callable",
+}
 vim.validate = function(...)
   local args = { ... }
   -- Detect old-style vim.validate({name = {val, type}}) single-table call
@@ -48,7 +57,14 @@ vim.validate = function(...)
     if first_key and type(first_key) == "string" and type(tbl[first_key]) == "table" and tbl[first_key][1] ~= nil then
       -- Convert old-style to new-style calls
       for name, spec in pairs(tbl) do
-        _original_validate(name, spec[1], spec[2], spec[3])
+        local val = spec[1]
+        local expected = spec[2]
+        local optional = spec[3]
+        -- Translate short type names (e.g. "f" -> "function")
+        if type(expected) == "string" then
+          expected = _validate_type_map[expected] or expected
+        end
+        _original_validate(name, val, expected, optional)
       end
       return
     end

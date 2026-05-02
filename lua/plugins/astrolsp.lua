@@ -5,6 +5,28 @@
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
 --       as this provides autocomplete and documentation while editing
 
+local homebrew_gcc = "/opt/homebrew/opt/gcc"
+local gcc_cxx_versions = vim.fn.glob(homebrew_gcc .. "/include/c++/*", false, true)
+table.sort(gcc_cxx_versions)
+local gcc_cxx_include = gcc_cxx_versions[#gcc_cxx_versions] or (homebrew_gcc .. "/include/c++/15")
+
+local gcc_target_includes = vim.fn.glob(gcc_cxx_include .. "/*-apple-darwin*", false, true)
+table.sort(gcc_target_includes)
+local gcc_target_include = gcc_target_includes[#gcc_target_includes] or (gcc_cxx_include .. "/aarch64-apple-darwin24")
+
+local gcc_query_drivers = {}
+for _, pattern in ipairs {
+  homebrew_gcc .. "/bin/gcc-[0-9]*",
+  homebrew_gcc .. "/bin/g++-[0-9]*",
+  "/opt/homebrew/bin/gcc-[0-9]*",
+  "/opt/homebrew/bin/g++-[0-9]*",
+} do
+  vim.list_extend(gcc_query_drivers, vim.fn.glob(pattern, false, true))
+end
+
+local macos_sdk = vim.fn.systemlist { "xcrun", "--show-sdk-path" }[1]
+if vim.v.shell_error ~= 0 or macos_sdk == "" then macos_sdk = "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk" end
+
 ---@type LazySpec
 return {
   "AstroNvim/astrolsp",
@@ -49,16 +71,28 @@ return {
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
-      --[[
       clangd = {
-        cmd = { "clangd", "--fallback-style=LLVM" },
-        settings = {
-          clangd = {
-            fallbackFlags = { "--style={IndentWidth: 4}" },
+        cmd = {
+          "/opt/homebrew/opt/llvm/bin/clangd",
+          "--fallback-style=LLVM",
+          "--query-driver=" .. table.concat(gcc_query_drivers, ","),
+        },
+        init_options = {
+          fallbackFlags = {
+            "-xc++",
+            "-std=gnu++23",
+            "-nostdinc++",
+            "-isystem",
+            gcc_cxx_include,
+            "-isystem",
+            gcc_target_include,
+            "-isystem",
+            gcc_cxx_include .. "/backward",
+            "-isysroot",
+            macos_sdk,
           },
         },
       },
-      --]]
     },
     -- customize how language servers are attached
     handlers = {

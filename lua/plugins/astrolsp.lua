@@ -5,31 +5,70 @@
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
 --       as this provides autocomplete and documentation while editing
 
-local homebrew_gcc = "/opt/homebrew/opt/gcc"
-local gcc_cxx_versions = vim.fn.glob(homebrew_gcc .. "/include/c++/*", false, true)
-table.sort(gcc_cxx_versions)
-local gcc_cxx_include = gcc_cxx_versions[#gcc_cxx_versions] or (homebrew_gcc .. "/include/c++/15")
+-- Linux uses clangd from Mason/PATH and the native compiler's include paths.
+local clangd = {
+  cmd = { "clangd", "--fallback-style=LLVM" },
+  init_options = { fallbackFlags = { "-xc++", "-std=gnu++23" } },
+}
+if vim.fn.has "mac" == 1 then
+  local brew_prefix = vim.env.HOMEBREW_PREFIX
+    or (vim.fn.isdirectory "/opt/homebrew" == 1 and "/opt/homebrew" or "/usr/local")
+  local brew_clangd = brew_prefix .. "/opt/llvm/bin/clangd"
+  if vim.fn.executable(brew_clangd) == 1 then clangd.cmd[1] = brew_clangd end
 
-local gcc_target_includes = vim.fn.glob(gcc_cxx_include .. "/*-apple-darwin*", false, true)
-table.sort(gcc_target_includes)
-local gcc_target_include = gcc_target_includes[#gcc_target_includes] or (gcc_cxx_include .. "/aarch64-apple-darwin24")
+  local homebrew_gcc = brew_prefix .. "/opt/gcc"
+  local gcc_cxx_versions = vim.fn.glob(homebrew_gcc .. "/include/c++/*", false, true)
+  table.sort(gcc_cxx_versions, function(a, b)
+    return (tonumber(a:match "(%d+)$") or 0) < (tonumber(b:match "(%d+)$") or 0)
+  end)
+  local gcc_cxx_include = gcc_cxx_versions[#gcc_cxx_versions]
+  if gcc_cxx_include then
+    local flags = clangd.init_options.fallbackFlags
+    vim.list_extend(flags, { "-nostdinc++", "-isystem", gcc_cxx_include })
+    for _, path in ipairs(vim.fn.glob(gcc_cxx_include .. "/*-apple-darwin*", false, true)) do
+      vim.list_extend(flags, { "-isystem", path })
+    end
+    if vim.fn.isdirectory(gcc_cxx_include .. "/backward") == 1 then
+      vim.list_extend(flags, { "-isystem", gcc_cxx_include .. "/backward" })
+    end
+  end
 
-local gcc_query_drivers = {}
-for _, pattern in ipairs {
-  homebrew_gcc .. "/bin/gcc-[0-9]*",
-  homebrew_gcc .. "/bin/g++-[0-9]*",
-  "/opt/homebrew/bin/gcc-[0-9]*",
-  "/opt/homebrew/bin/g++-[0-9]*",
-} do
-  vim.list_extend(gcc_query_drivers, vim.fn.glob(pattern, false, true))
+  local drivers = {}
+  for _, pattern in ipairs {
+    homebrew_gcc .. "/bin/gcc-[0-9]*", homebrew_gcc .. "/bin/g++-[0-9]*",
+    brew_prefix .. "/bin/gcc-[0-9]*", brew_prefix .. "/bin/g++-[0-9]*",
+  } do
+    vim.list_extend(drivers, vim.fn.glob(pattern, false, true))
+  end
+  if #drivers > 0 then table.insert(clangd.cmd, "--query-driver=" .. table.concat(drivers, ",")) end
+  if vim.fn.executable "xcrun" == 1 then
+    local sdk = vim.fn.systemlist { "xcrun", "--show-sdk-path" }[1]
+    if vim.v.shell_error == 0 and sdk and vim.fn.isdirectory(sdk) == 1 then
+      vim.list_extend(clangd.init_options.fallbackFlags, { "-isysroot", sdk })
+    end
+  end
 end
 
-local macos_sdk = vim.fn.systemlist { "xcrun", "--show-sdk-path" }[1]
-if vim.v.shell_error ~= 0 or macos_sdk == "" then macos_sdk = "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk" end
+local ltex_plus_jdks = vim.fn.glob(
+  vim.fn.stdpath "data" .. "/mason/packages/ltex-ls-plus/ltex-ls-plus-*/jdk-*",
+  false,
+  true
+)
+table.sort(ltex_plus_jdks)
+local ltex_plus_java_home = ltex_plus_jdks[#ltex_plus_jdks]
 
 ---@type LazySpec
 return {
   "AstroNvim/astrolsp",
+  dependencies = {
+    {
+      "jhofscheier/ltex-utils.nvim",
+      dependencies = { "nvim-telescope/telescope.nvim" },
+      opts = {
+        backend = "ltex_plus",
+      },
+    },
+  },
   ---@type AstroLSPOpts
   opts = {
     -- Clear deprecated vim.lsp.with() handlers from AstroNvim defaults
@@ -66,33 +105,24 @@ return {
     },
     -- enable servers that you already have installed without mason
     servers = {
-      -- "pyright"
+      "ltex_plus",
     },
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
-      clangd = {
-        cmd = {
-          "/opt/homebrew/opt/llvm/bin/clangd",
-          "--fallback-style=LLVM",
-          "--query-driver=" .. table.concat(gcc_query_drivers, ","),
-        },
-        init_options = {
-          fallbackFlags = {
-            "-xc++",
-            "-std=gnu++23",
-            "-nostdinc++",
-            "-isystem",
-            gcc_cxx_include,
-            "-isystem",
-            gcc_target_include,
-            "-isystem",
-            gcc_cxx_include .. "/backward",
-            "-isysroot",
-            macos_sdk,
+      ltex_plus = {
+        cmd_env = ltex_plus_java_home and { JAVA_HOME = ltex_plus_java_home } or nil,
+        settings = {
+          ltex = {
+            enabled = true,
+            language = "en-US",
+            additionalRules = {
+              enablePickyRules = true,
+            },
           },
         },
       },
+      clangd = clangd,
     },
     -- customize how language servers are attached
     handlers = {
@@ -146,6 +176,7 @@ return {
     -- A custom `on_attach` function to be run after the default `on_attach` function
     -- takes two parameters `client` and `bufnr`  (`:h lspconfig-setup`)
     on_attach = function(client, bufnr)
+      if client.name == "ltex_plus" then require("ltex-utils").on_attach(bufnr) end
       -- this would disable semanticTokensProvider for all clients
       -- client.server_capabilities.semanticTokensProvider = nil
     end,

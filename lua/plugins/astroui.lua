@@ -12,13 +12,16 @@ return {
   opts = {
     -- change colorscheme
     -- colorscheme = "astrodark",
-    -- colorscheme = "everforest",
     -- colorsche = "default",
-    colorscheme = "rose-pine",
+    colorscheme = "everforest",
     -- AstroUI allows you to easily modify highlight groups easily for any and all colorschemes
     highlights = {
       init = { -- this table overrides highlights in all themes
         -- Normal = { bg = "#000000" },
+        DiagnosticUnderlineError = { undercurl = true, sp = "#ff5f5f" },
+        DiagnosticUnderlineWarn = { undercurl = true, sp = "#ff5f5f" },
+        DiagnosticUnderlineInfo = { undercurl = true, sp = "#ff5f5f" },
+        DiagnosticUnderlineHint = { undercurl = true, sp = "#ff5f5f" },
       },
       astrodark = { -- a table of overrides/changes when applying the astrotheme theme
         -- Normal = { bg = "#000000" },

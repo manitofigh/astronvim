@@ -1,1 +1,1 @@
-lazy-lock.json
+# Keep lazy-lock.json versioned so new machines restore the same plugins.

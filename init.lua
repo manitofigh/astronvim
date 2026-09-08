@@ -13,8 +13,9 @@ vim.opt.scrolloff = 10
 if not pcall(require, "lazy") then
   -- stylua: ignore
   vim.api.nvim_echo({ { ("Unable to load lazy from: %s\n"):format(lazypath), "ErrorMsg" }, { "Press any key to exit...", "MoreMsg" } }, true, {})
+  if #vim.api.nvim_list_uis() == 0 then vim.cmd "cquit 1" end
   vim.fn.getchar()
-  vim.cmd.quit()
+  vim.cmd "cquit 1"
 end
 
 -- Shim deprecated APIs to silence warnings from plugins not yet updated for Neovim 0.12
@@ -72,5 +73,6 @@ vim.validate = function(...)
   return _original_validate(...)
 end
 
+vim.api.nvim_create_augroup("FileExplorer", { clear = false })
 require "lazy_setup"
 require "polish"
